@@ -79,6 +79,10 @@ public class WebSocket : ModuleRules
 			}
 			);
 
+        if(int.Parse(EngineMinorVersion) > 23)
+        {
+            PublicDefinitions.Add("PLATFORM_HTML5=0");
+        }
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
@@ -105,7 +109,8 @@ public class WebSocket : ModuleRules
                     PublicAdditionalLibraries.Add(Lib);
                 }
             }
-            else if(EngineMinorVersion == "22" || EngineMinorVersion == "23")
+            /*else if(EngineMinorVersion == "22" || EngineMinorVersion == "23")*/
+            else
             {
                 // for 4.22 and 4.23
                 if (Target.Type == TargetType.Editor)
@@ -146,7 +151,8 @@ public class WebSocket : ModuleRules
                     PublicAdditionalLibraries.Add(Lib);
                 }
             }
-            else if(EngineMinorVersion == "22"|| EngineMinorVersion == "23")
+            /*else if(EngineMinorVersion == "22"|| EngineMinorVersion == "23")*/
+            else
             {
                 string[] StaticLibrariesX32 = new string[] {
                     "websockets_static422.lib",
@@ -160,7 +166,7 @@ public class WebSocket : ModuleRules
                 }
             }
         }
-        else if(Target.Platform == UnrealTargetPlatform.HTML5)
+        /*else if(Target.Platform == UnrealTargetPlatform.HTML5)
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");
             string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/HTML5/"));
@@ -174,7 +180,7 @@ public class WebSocket : ModuleRules
             {
                 PublicAdditionalLibraries.Add(strStaticPath + Lib);
             }
-        }
+        }*/
         else if(Target.Platform == UnrealTargetPlatform.Mac)
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");
@@ -256,6 +262,9 @@ public class WebSocket : ModuleRules
             {
                 PublicAdditionalLibraries.Add(Lib);
             }
+
+            string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
+            AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(PluginPath, "WebSocket_UPL.xml"));
         }
     }
 
