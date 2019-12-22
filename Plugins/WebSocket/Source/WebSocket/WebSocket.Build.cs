@@ -222,6 +222,7 @@ public class WebSocket : ModuleRules
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/IOS");
+            PrivateDependencyModuleNames.Add("OpenSSL");
 
             string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath + "/Source/");
             PluginPath = PluginPath.Replace("\\", "/");
@@ -231,8 +232,8 @@ public class WebSocket : ModuleRules
 
             string[] StaticLibrariesIOS = new string[] {
                 "websockets",
-                "ssl",
-                "crypto"
+                //"ssl",
+                //"crypto"
             };
 
             foreach (string Lib in StaticLibrariesIOS)
