@@ -207,13 +207,21 @@ public class WebSocket : ModuleRules
             string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Linux/"));
             PublicLibraryPaths.Add(strStaticPath);
 
-            string[] StaticLibrariesMac = new string[] {
-                "libwebsockets.a",
-                //"libssl.a",
-                //"libcrypto.a"
-            };
-            
-            foreach (string Lib in StaticLibrariesMac)
+            string[] StaticLibrariesLinux = null;
+            if (int.Parse(EngineMinorVersion) >= 24)
+            {
+                StaticLibrariesLinux = new string[] {
+                    "libwebsockets424.a",
+                };
+            }
+            else
+            {
+                StaticLibrariesLinux = new string[] {
+                    "libwebsockets.a",
+                };
+            }
+
+            foreach (string Lib in StaticLibrariesLinux)
             {
                 PublicAdditionalLibraries.Add(Path.Combine(strStaticPath, Lib));
             }
