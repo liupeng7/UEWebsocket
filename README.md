@@ -9,7 +9,7 @@ this plugin is for these people, you don't need to write any c++ code,
 the plugin support blueprint api to make json string from message object, and can also decode json to message object.
 
 Even the io game, we still need to connect to non dedicated server, I first write this plugin for my poker game, and then 
-I use this plugin in a simple .io shoot game, here is the demo webgl version:[tankfire.io](http://50.116.0.118), you can open it with firefox(I use the latest firefox for test), please confirem your browser support webgl.
+I use this plugin in a simple .io shoot game.
 
 There's two level in the demo project, one for test websocket connect and send receive,
 The other level is test message Object serialize to json string, and from json string to message object.
@@ -30,9 +30,8 @@ I did not use struct, because change a value of a struct in blueprint is not con
 
 ★ 7. Win32
 
-★ 8. HTML5(NEW!!)
 
-this plugin tested on 4.22 4.21 with vs2017/vs2019(vs2015 may build fail).
+this plugin tested on 4.24,for old engine version, please download the right version from branch or tag.
 
 # Install
 This is a normal plugin, if you are a beginner and don't know how to install it, 
