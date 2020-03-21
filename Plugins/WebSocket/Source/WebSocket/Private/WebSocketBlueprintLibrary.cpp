@@ -19,9 +19,9 @@
 *  MA  02110-1301  USA
 */
 
+#include "WebSocketBlueprintLibrary.h"
 #include "WebSocket.h"
 #include "WebSocketContext.h"
-#include "WebSocketBlueprintLibrary.h"
 #include "Runtime/Launch/Resources/Version.h"
 
 

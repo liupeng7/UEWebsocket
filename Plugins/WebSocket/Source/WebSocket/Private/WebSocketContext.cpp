@@ -19,14 +19,13 @@
 *  MA  02110-1301  USA
 */
 
-
-#include "WebSocket.h"
 #include "WebSocketContext.h"
-#include "UObjectGlobals.h"
+#include "WebSocket.h"
+#include "UObject/UObjectGlobals.h"
 #include "WebSocketBase.h"
-#include "Paths.h"
-#include "FileManager.h"
-#include "FileHelper.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
+#include "Misc/FileHelper.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Misc/Base64.h"
 #include <fstream>

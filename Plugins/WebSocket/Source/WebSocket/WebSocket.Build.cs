@@ -94,34 +94,30 @@ public class WebSocket : ModuleRules
             }
 
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/Win64");
-            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Win64/"));
-            PublicLibraryPaths.Add(strStaticPath);
 
-            // for 4.21
-            if(EngineMinorVersion == "21" || EngineMinorVersion == "20")
+            if(int.Parse(EngineMinorVersion) < 22)
             {
-                string[] StaticLibrariesX64 = new string[] {
-                "websockets_static.lib",
-                };
-
-                foreach (string Lib in StaticLibrariesX64)
-                {
-                    PublicAdditionalLibraries.Add(Lib);
-                }
+                System.Console.WriteLine("the plugin current version is not support old engine version, please check right version from tag:4." + EngineMinorVersion);
             }
-            /*else if(EngineMinorVersion == "22" || EngineMinorVersion == "23")*/
             else
             {
-                // for 4.22 and 4.23
                 if (Target.Type == TargetType.Editor)
                 {
-                    PublicAdditionalLibraries.Add("websockets_static422.lib");
-                    PublicAdditionalLibraries.Add("libeay32.lib");
-                    PublicAdditionalLibraries.Add("ssleay32.lib");
+                    string[] StaticLibrariesX64Editor = new string[]
+                    {
+                        "websockets_static422.lib",
+                        "libeay32.lib",
+                        "ssleay32.lib"
+                    };
+
+                    foreach(string lib in StaticLibrariesX64Editor)
+                    {
+                        PublicAdditionalLibraries.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "ThirdParty/lib/Win64/"+lib) ) );
+                    }
                 }
                 else
                 {
-                    PublicAdditionalLibraries.Add("websockets_game_static422.lib");
+                    PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty/lib/Win64/websockets_game_static422.lib") );
                 }
             }
 
@@ -134,59 +130,28 @@ public class WebSocket : ModuleRules
             PrivateDependencyModuleNames.Add("OpenSSL");
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/Win32");
 
-            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Win32/"));
-            PublicLibraryPaths.Add(strStaticPath);
-
             // 4.22 and 4.21
-            if (EngineMinorVersion == "21" || EngineMinorVersion == "20")
+            if (int.Parse(EngineMinorVersion) < 22)
             {
-                string[] StaticLibrariesX32 = new string[] {
-                    "websockets_static.lib",
-                    //"libcrypto.lib",
-                    //"libssl.lib",
-                };
-
-                foreach (string Lib in StaticLibrariesX32)
-                {
-                    PublicAdditionalLibraries.Add(Lib);
-                }
+                System.Console.WriteLine("the plugin current version is not support old engine version, please check right version from tag:4." + EngineMinorVersion);
             }
-            /*else if(EngineMinorVersion == "22"|| EngineMinorVersion == "23")*/
             else
             {
                 string[] StaticLibrariesX32 = new string[] {
                     "websockets_static422.lib",
-                    //"libcrypto.lib",
-                    //"libssl.lib",
                 };
 
                 foreach (string Lib in StaticLibrariesX32)
                 {
-                    PublicAdditionalLibraries.Add(Lib);
+                    PublicAdditionalLibraries.Add(Path.GetFullPath(Path.Combine(ModuleDirectory, "ThirdParty/lib/Win32/" + Lib)));
                 }
             }
         }
-        /*else if(Target.Platform == UnrealTargetPlatform.HTML5)
-        {
-            PublicDefinitions.Add("PLATFORM_UWP=0");
-            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/HTML5/"));
-            PublicLibraryPaths.Add(strStaticPath);
-
-            string[] StaticLibrariesHTML5 = new string[] {
-                "WebSocket.js",
-            };
-
-            foreach (string Lib in StaticLibrariesHTML5)
-            {
-                PublicAdditionalLibraries.Add(strStaticPath + Lib);
-            }
-        }*/
         else if(Target.Platform == UnrealTargetPlatform.Mac)
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/Mac");
             string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Mac/"));
-            //PublicLibraryPaths.Add(strStaticPath);
 
             string[] StaticLibrariesMac = new string[] {
                 "libwebsockets.a",
@@ -205,7 +170,6 @@ public class WebSocket : ModuleRules
             PrivateDependencyModuleNames.Add("OpenSSL");
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/Linux");
             string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Linux/"));
-            PublicLibraryPaths.Add(strStaticPath);
 
             string[] StaticLibrariesLinux = null;
             if (int.Parse(EngineMinorVersion) >= 24)
@@ -232,44 +196,39 @@ public class WebSocket : ModuleRules
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/IOS");
             PrivateDependencyModuleNames.Add("OpenSSL");
 
+            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/IOS/"));
+
             string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath + "/Source/");
             PluginPath = PluginPath.Replace("\\", "/");
 
-            string strStaticPath = PluginPath + "/ThirdParty/lib/IOS/";// Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/IOS/"));
-            PublicLibraryPaths.Add(strStaticPath);
 
             string[] StaticLibrariesIOS = new string[] {
-                "websockets",
+                "libwebsockets.a",
                 //"ssl",
                 //"crypto"
             };
 
             foreach (string Lib in StaticLibrariesIOS)
             {
-                PublicAdditionalLibraries.Add(Lib);
-                PublicAdditionalShadowFiles.Add(Path.Combine(strStaticPath, "lib" + Lib + ".a") );
+                PublicAdditionalLibraries.Add(Path.Combine(strStaticPath, Lib) );
+                //PublicAdditionalShadowFiles.Add(Path.Combine(strStaticPath, "lib" + Lib + ".a") );
             }
         }
         else if(Target.Platform == UnrealTargetPlatform.Android)
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");
             PrivateIncludePaths.Add("WebSocket/ThirdParty/include/Android");
-            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Android/armeabi-v7a"));
-            PublicLibraryPaths.Add(strStaticPath);
-
-            string strStaticArm64Path = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/Android/arm64-v8a"));
-            PublicLibraryPaths.Add(strStaticArm64Path);
-
-
+            
             string[] StaticLibrariesAndroid = new string[] {
-                "websockets",
-                "ssl",
-                "crypto"
+                "libwebsockets.a",
+                "libssl.a",
+                "libcrypto.a"
             };
 
             foreach (string Lib in StaticLibrariesAndroid)
             {
-                PublicAdditionalLibraries.Add(Lib);
+                PublicAdditionalLibraries.Add(Path.Combine(ModulePath, "ThirdParty/lib/Android/armeabi-v7a/"+ Lib));
+                PublicAdditionalLibraries.Add(Path.Combine(ModulePath, "ThirdParty/lib/Android/arm64-v8a/"+ Lib));
             }
 
             string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
